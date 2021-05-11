@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            
+        }
+
+        li {
+            list-style: none;
+            background-color: red;
+        }
+
+        .champ-block {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            align-items: center;
+        }
+
+        .champ-block:nth-child(even) {
+            background-color: #CEA8CA;
+        }
+
+        .champ-block h4 {
+            text-align: center;
+        }
+
+        .skin-name-date {
+            padding: 1rem .5rem;
+        }
+    </style>
+    <div class="container">
+        <button onclick="oie()">oie</button>
+    </div>
+    <script>
+        async function oie() {
+            const response = await fetch('./Chromes.json');
+            const data = await response.json();
+            console.log(data[0][1][0])
+
+            
+            
+            let bg = "red";
+
+            const htmlList = data.map((currData) => `
+            <div class="champ-block">
+                <h4>${currData[0]}</h4>
+                <div class="champ-skins" style="display: flex; justify-content: space-around; flex-direction: column">
+                    ${currData.map(curr => `${typeof(curr) == "object" && `<div class="skin-name-date" style="display: flex; justify-content: space-around; background-color:${curr[3].match(/-..-/g) != null && Number(curr[3].match(/-..-/g)[0].replace(/-/g, "")) <= 6 ? bg = "#23699D" : bg = "#B0DAE6"}">
+                        <div>${curr[0]}</div>
+                        <div>${curr[3]}</div>
+                    </div>`}`)}
+                </div>
+                
+            </div>`).join("")
+
+            document.querySelector(".container").innerHTML = htmlList
+        }
+    </script>
+    
+    
+</body>
+</html>
